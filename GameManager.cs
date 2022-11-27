@@ -145,4 +145,44 @@ public class GameManager
 
         return slotNum;
     }
+
+    public int winningConditionCheck()
+    {
+        int horizontalWin = horizontalChecking();
+        // int verticalWin = false;
+        // int diagonalWin = false;
+
+        if (horizontalWin != 0)
+        {
+            return horizontalWin;
+        }
+
+        return 0;
+    }
+
+    int horizontalChecking()
+    {
+        for (int y = 0; y < yOfBoard; y++)
+        {
+            for (int z = 0; z < zOfBoard; z++)
+            {
+                for (int x = 0; x < 4; x++)
+                {
+                    if (boardState[x, y, z] != 0)
+                    {
+                        int a = boardState[x, y, z];
+                        int b = boardState[x, y + 1, z];
+                        int c = boardState[x, y + 2, z];
+                        int d = boardState[x, y + 3, z];
+
+                        if (a == b && a == c && a == d)
+                        {
+                            return a;
+                        }
+                    }
+                }
+            }
+        }
+        return 0;
+    }
 }

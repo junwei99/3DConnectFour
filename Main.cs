@@ -9,28 +9,51 @@ namespace HelloWorld
         {
             GameManager gm = new GameManager(4, 4, 4);
 
-            Helper helper = new Helper();
+            while (gm.playerThatWon == 0)
+            {
+                string val = "";
+                Console.WriteLine("input slot (0-15)");
+                val = Console.ReadLine();
+                int slotNumPlayed = Convert.ToInt32(val);
+                //if 0 game will go on, if 1 or 2 means there is a winner
+                int gameWinValue = player1MakeMove(gm, slotNumPlayed);
 
-            // while (gm.playerThatWon == 0)
-            // {
-            //     string val = "";
-            //     Console.WriteLine("input slot (0-15)");
-            //     val = Console.ReadLine();
-            //     int slotNumPlayed = Convert.ToInt32(val);
+                printBoard(gm.boardState);
+            }
+        }
 
-            //     gm.takeTurn(slotNumPlayed);
-            //     Move bestMove = gm.getAIBestMove();
+        private static int player1MakeMove(GameManager gm, int player1SlotPlayed)
+        {
+            int player1WinValue = makeMove(gm, player1SlotPlayed);
 
-            //     int slotNum = gm.getSlotNumFromCoordinates(bestMove.xCoordinate, bestMove.yCoordinate, bestMove.zCoordinate);
+            if (player1WinValue != 0)
+            {
+                return player1WinValue;
+            }
 
-            //     gm.takeTurn(slotNum);
+            Move bestMove = gm.getAIBestMove();
 
-            //     Console.WriteLine($"best move: {bestMove.xCoordinate}, {bestMove.yCoordinate}, {bestMove.xCoordinate} \n slotNum: {slotNum}");
+            int aiSlotNum = gm.getSlotNumFromCoordinates(bestMove.xCoordinate, bestMove.yCoordinate, bestMove.zCoordinate);
 
-            //     printBoard(gm.boardState);
-            // }
+            int aiWinValue = makeMove(gm, aiSlotNum);
 
+            Console.WriteLine($"best move: {bestMove.xCoordinate}, {bestMove.yCoordinate}, {bestMove.xCoordinate} \n slotNum: {aiSlotNum}");
 
+            if (aiWinValue != 0)
+            {
+                return aiWinValue;
+            }
+
+            return 0;
+        }
+
+        //return 0 if no winning condition is matched after the move, return the player number if winning condiiton is matched
+        private static int makeMove(GameManager gm, int slot)
+        {
+            gm.takeTurn(slot);
+            int winningPlayer = gm.winningConditionCheck() != 0 ? gm.winningConditionCheck() : 0;
+
+            return winningPlayer;
         }
 
         private static void printBoard(int[,,] boardState)
