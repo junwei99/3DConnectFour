@@ -1,0 +1,15 @@
+/Users/junwei/Documents/source-code/xyAssignment/obj/Debug/net6.0/xyAssignment.csproj.AssemblyReference.cache
+/Users/junwei/Documents/source-code/xyAssignment/obj/Debug/net6.0/xyAssignment.GeneratedMSBuildEditorConfig.editorconfig
+/Users/junwei/Documents/source-code/xyAssignment/obj/Debug/net6.0/xyAssignment.AssemblyInfoInputs.cache
+/Users/junwei/Documents/source-code/xyAssignment/obj/Debug/net6.0/xyAssignment.AssemblyInfo.cs
+/Users/junwei/Documents/source-code/xyAssignment/obj/Debug/net6.0/xyAssignment.csproj.CoreCompileInputs.cache
+/Users/junwei/Documents/source-code/xyAssignment/bin/Debug/net6.0/xyAssignment
+/Users/junwei/Documents/source-code/xyAssignment/bin/Debug/net6.0/xyAssignment.deps.json
+/Users/junwei/Documents/source-code/xyAssignment/bin/Debug/net6.0/xyAssignment.runtimeconfig.json
+/Users/junwei/Documents/source-code/xyAssignment/bin/Debug/net6.0/xyAssignment.dll
+/Users/junwei/Documents/source-code/xyAssignment/bin/Debug/net6.0/ref/xyAssignment.dll
+/Users/junwei/Documents/source-code/xyAssignment/bin/Debug/net6.0/xyAssignment.pdb
+/Users/junwei/Documents/source-code/xyAssignment/obj/Debug/net6.0/xyAssignment.dll
+/Users/junwei/Documents/source-code/xyAssignment/obj/Debug/net6.0/ref/xyAssignment.dll
+/Users/junwei/Documents/source-code/xyAssignment/obj/Debug/net6.0/xyAssignment.pdb
+/Users/junwei/Documents/source-code/xyAssignment/obj/Debug/net6.0/xyAssignment.genruntimeconfig.cache
