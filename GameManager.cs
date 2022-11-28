@@ -5,11 +5,10 @@ public class GameManager
     public int zOfBoard = 4;
 
     public int[,,] boardState;
-
     bool player1Turn = true;
 
-    //0 for no player win yet, 1 for player 1, 2 for player 2
     public int playerThatWon = 0;
+
 
     public GameManager(int _x, int _y, int _z)
     {
@@ -19,6 +18,7 @@ public class GameManager
         boardState = new int[xOfBoard, yOfBoard, zOfBoard];
     }
 
+    //update board state based on slot number passed in
     public int[,,] takeTurn(int slot)
     {
         if (updateBoardState(slot))
@@ -29,92 +29,103 @@ public class GameManager
         return boardState;
     }
 
+    //get AI best move (xyz coordinates) using minimax
     public Move getAIBestMove()
     {
-        double bestScore = double.NegativeInfinity;
+        int bestScore = int.MinValue;
         Move bestMove = new Move(0, 0, 0);
-        int numOfLoops = 0;
-
         int[,,] copyOfBoard = (int[,,])boardState.Clone();
 
-        for (int x = 0; x < boardState.GetLength(0); x++)
+        for (int x = 0; x < xOfBoard; x++)
         {
-            for (int z = 0; z < boardState.GetLength(2); z++)
+            for (int z = 0; z < zOfBoard; z++)
             {
-                for (int y = 0; y < boardState.GetLength(1); y++)
+                for (int y = 0; y < yOfBoard; y++)
                 {
-                    if (boardState[x, y, z] == 0)
+                    if (copyOfBoard[x, y, z] == 0)
                     {
                         copyOfBoard[x, y, z] = 2;
                         int score = minimax(copyOfBoard, 0, false);
+                        Console.WriteLine($"score: {score}");
                         copyOfBoard[x, y, z] = 0;
                         if (score > bestScore)
                         {
                             bestScore = score;
                             bestMove.setMove(x, y, z);
                         }
-                        numOfLoops = numOfLoops + 1;
                         break;
                     }
                 }
             }
         }
 
-        Console.WriteLine($"num of loops = {numOfLoops}");
-
         return bestMove;
     }
 
-    int minimax(int[,,] boardState, int depth, bool isMaximizing)
+    int minimax(int[,,] board, int depth, bool isMaximizing)
     {
-        if (isMaximizing)
-        {
-            int bestScore = int.MinValue;
-            for (int x = 0; x < boardState.GetLength(0); x++)
-            {
-                for (int z = 0; z < boardState.GetLength(2); z++)
-                {
-                    for (int y = 0; y < boardState.GetLength(1); y++)
-                    {
-                        if (boardState[x, y, z] == 0)
-                        {
-                            int[,,] copyOfBoard = (int[,,])boardState.Clone();
-                            copyOfBoard[x, y, z] = 2;
-                            int score = minimax(copyOfBoard, depth + 1, false);
-                            copyOfBoard[x, y, z] = 0;
-                            bestScore = Math.Max(score, bestScore);
-                            break;
-                        }
-                    }
-                }
-            }
-            return bestScore;
-        }
-        else
-        {
-            int bestScore = int.MaxValue;
-            for (int x = 0; x < boardState.GetLength(0); x++)
-            {
-                for (int z = 0; z < boardState.GetLength(2); z++)
-                {
-                    for (int y = 0; y < boardState.GetLength(1); y++)
-                    {
-                        if (boardState[x, y, z] == 0)
-                        {
-                            int[,,] copyOfBoard = (int[,,])boardState.Clone();
-                            copyOfBoard[x, y, z] = 1;
-                            int score = minimax(copyOfBoard, depth + 1, true);
-                            copyOfBoard[x, y, z] = 0;
-                            bestScore = Math.Min(score, bestScore);
-                            break;
-                        }
-                    }
-                }
-            }
-            return bestScore;
-        }
+        // var scoresDict = new Dictionary<int, int>(){
+        //     {1, 10},
+        //     {2, -10},
+        //     {3, 0}
+        // };
+
+        // int result = winningConditionCheck();
+        // if (result != 0)
+        // {
+        //     return scoresDict[result];
+        // }
+
+        // if (isMaximizing)
+        // {
+        //     int bestScore = int.MinValue;
+
+        //     for (int x = 0; x < xOfBoard; x++)
+        //     {
+        //         for (int z = 0; z < zOfBoard; z++)
+        //         {
+        //             for (int y = 0; y < yOfBoard; y++)
+        //             {
+        //                 if (board[x, y, z] == 0)
+        //                 {
+        //                     board[x, y, z] = 2;
+        //                     int score = minimax(board, depth + 1, false);
+        //                     board[x, y, z] = 0;
+        //                     bestScore = Math.Max(score, bestScore);
+        //                     break;
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     return bestScore;
+        // }
+        // else
+        // {
+        //     int bestScore = int.MaxValue;
+
+        //     for (int x = 0; x < xOfBoard; x++)
+        //     {
+        //         for (int z = 0; z < zOfBoard; z++)
+        //         {
+        //             for (int y = 0; y < yOfBoard; y++)
+        //             {
+        //                 if (board[x, y, z] == 0)
+        //                 {
+        //                     board[x, y, z] = 1;
+        //                     int score = minimax(board, depth + 1, true);
+        //                     board[x, y, z] = 0;
+        //                     bestScore = Math.Min(score, bestScore);
+        //                     break;
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     return bestScore;
+        // }
+        return 1;
     }
 
+    //pass in slot to update board state 
     bool updateBoardState(int slot)
     {
         int zCoordinate = (int)(slot / zOfBoard);
@@ -139,6 +150,7 @@ public class GameManager
         return false;
     }
 
+    //pass in x,y,z coordinates to get slot number
     public int getSlotNumFromCoordinates(int x, int y, int z)
     {
         int slotNum = ((x + 1) * (z + 1)) - 1;
@@ -146,6 +158,7 @@ public class GameManager
         return slotNum;
     }
 
+    //check if there is winner, 0 for game continues without winner, 1 for player 1 won, 2 for player 2 won
     public int winningConditionCheck()
     {
         int horizontalWin = horizontalChecking();
@@ -160,26 +173,21 @@ public class GameManager
         return 0;
     }
 
+    //check if there is any horizontal checking winning condition matched, return 0 for game continues without winner, 1 for player 1 won, 2 for player 2 won
     int horizontalChecking()
     {
         for (int y = 0; y < yOfBoard; y++)
         {
             for (int z = 0; z < zOfBoard; z++)
             {
-                for (int x = 0; x < 4; x++)
-                {
-                    if (boardState[x, y, z] != 0)
-                    {
-                        int a = boardState[x, y, z];
-                        int b = boardState[x, y + 1, z];
-                        int c = boardState[x, y + 2, z];
-                        int d = boardState[x, y + 3, z];
+                int a = boardState[0, y, z];
+                int b = boardState[1, y, z];
+                int c = boardState[2, y, z];
+                int d = boardState[3, y, z];
 
-                        if (a == b && a == c && a == d)
-                        {
-                            return a;
-                        }
-                    }
+                if (a != 0 && a == b && a == c && a == d)
+                {
+                    return a;
                 }
             }
         }
