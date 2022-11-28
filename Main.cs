@@ -47,7 +47,7 @@ namespace HelloWorld
             //AI play a move
             int aiWinValue = makeMove(gm, aiSlotNum);
 
-            Console.WriteLine($"best move: {bestMove.xCoordinate}, {bestMove.yCoordinate}, {bestMove.xCoordinate} \n slotNum: {aiSlotNum}");
+            Console.WriteLine($"best move: {bestMove.xCoordinate}, {bestMove.yCoordinate}, {bestMove.zCoordinate} \n slotNum: {aiSlotNum}");
 
             //if there is a winner, return number (1 = player 1 won, 2 = player 2 won) 
             if (aiWinValue != 0)
@@ -64,11 +64,12 @@ namespace HelloWorld
         {
             gm.takeTurn(slot);
 
-            //check if anyone won
-            int winningPlayer = gm.winningConditionCheck() != 0 ? gm.winningConditionCheck() : 0;
+            // //check if anyone won
+            // int winningPlayer = gm.winningConditionCheck() != 0 ? gm.winningConditionCheck() : 0;
 
-            //if there is a winner, return number (1 = player 1 won, 2 = player 2 won) 
-            return winningPlayer;
+            // //if there is a winner, return number (1 = player 1 won, 2 = player 2 won) 
+            // return winningPlayer;
+            return 0;
         }
 
         //print board to console
