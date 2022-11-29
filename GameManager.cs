@@ -243,19 +243,34 @@ public class GameManager
     {
         float score = 0;
 
-        for (int y = 0; y < yOfBoard; y++)
+        for (int i = 0; i < 2; i++)
         {
-            for (int z = 0; z < zOfBoard; z++)
+            for (int y = 0; y < yOfBoard; y++)
             {
-                int a = currentBoard[0, y, z];
-                int b = currentBoard[1, y, z];
-                int c = currentBoard[2, y, z];
-                int d = currentBoard[3, y, z];
-
-                if (a != 0)
+                for (int z = 0; z < zOfBoard; z++)
                 {
+                    int a;
+                    int b;
+                    int c;
+                    int d;
+
+                    if (i == 0)
+                    {
+                        a = currentBoard[0, y, z];
+                        b = currentBoard[1, y, z];
+                        c = currentBoard[2, y, z];
+                        d = currentBoard[3, y, z];
+                    }
+                    else
+                    {
+                        a = currentBoard[z, y, 0];
+                        b = currentBoard[z, y, 1];
+                        c = currentBoard[z, y, 2];
+                        d = currentBoard[z, y, 3];
+                    }
+
                     //all 4 is checked
-                    if (a == b && a == c && a == d)
+                    if (a != 0 && a == b && a == c && a == d)
                     {
                         if (isMaximizer)
                         {
@@ -268,62 +283,52 @@ public class GameManager
                     }
 
                     //3 out of 4 checked
-                    if ((a == b && a == c && d == 0) || (a == 0 && b == c && b == d))
+                    if ((b != 0) && (a == b && a == c && d == 0) || (a == 0 && b == c && b == d))
                     {
-                        if (a != 0)
+
+                        int compareValue = (a != 0) ? a : b;
+
+                        if (isMaximizer)
                         {
-                            if (isMaximizer)
-                            {
-                                score = score + ((a == 1) ? -5 : 5);
-                            }
-                            else
-                            {
-                                score = score + ((a == 2) ? 5 : -5);
-                            }
+                            score = score + ((compareValue == 1) ? -5 : 5);
                         }
                         else
                         {
-                            if (isMaximizer)
-                            {
-                                score = score + ((b == 1) ? -5 : 5);
-                            }
-                            else
-                            {
-                                score = score + ((b == 2) ? 5 : -5);
-                            }
+                            score = score + ((compareValue == 2) ? 5 : -5);
                         }
                     }
 
                     //2 out of 4 checked
-                    if ((a == b && c == 0 && d == 0) || (c == d && a == 0 && b == 0) || (b == c && a == 0 && d == 0))
+                    if ((a != 0 && a == b && c == 0 && d == 0) || ((c != 0) && (c == d && a == 0 && b == 0) || (b == c && a == 0 && d == 0)))
                     {
-                        if (a != 0)
+                        int compareValue = (a != 0) ? a : c;
+                        if (isMaximizer)
                         {
-                            if (isMaximizer)
-                            {
-                                score = score + ((a == 1) ? -1 : 1);
-                            }
-                            else
-                            {
-                                score = score + ((a == 2) ? 1 : -1);
-                            }
+                            score = score + ((compareValue == 1) ? -1 : 1);
                         }
-                        else if (c != 0)
+                        else
                         {
-                            if (isMaximizer)
-                            {
-                                score = score + ((c == 1) ? -1 : 1);
-                            }
-                            else
-                            {
-                                score = score + ((c == 2) ? 1 : -1);
-                            }
+                            score = score + ((compareValue == 2) ? 1 : -1);
                         }
                     }
-                }
 
+                    //1 checked in middle (advantageous spot)
+                    if ((z == 1 || z == 2) && ((b != 0) && (b == c) && (a == 0 && d == 0)))
+                    {
+                        if (isMaximizer)
+                        {
+                            score = score + ((b == 1) ? -3 : 3);
+                        }
+                        else
+                        {
+                            score = score + ((b == 2) ? 3 : -3);
+                        }
+                    }
+
+                }
             }
         }
+
 
         return score;
     }
