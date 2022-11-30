@@ -5,7 +5,7 @@ public class GameManager
     public int zOfBoard = 4;
 
     public int[,,] boardState;
-    bool player1Turn = true;
+    bool player1Turn = false;
 
     public int playerThatWon = 0;
 
@@ -137,7 +137,7 @@ public class GameManager
         {
             if (winner != 0)
             {
-                return winner == 1 ? (-10000000 * searchDepth) : (10000000 * searchDepth);
+                return winner == 1 ? -1000000000 : 1000000000;
             }
             else
             {
@@ -325,11 +325,11 @@ public class GameManager
                         int compareValue = (b != 1) ? b : c;
                         if (isMaximizer)
                         {
-                            score = score + ((compareValue == 1) ? -3 : 3);
+                            score = score + ((compareValue == 1) ? -1 : 1);
                         }
                         else
                         {
-                            score = score + ((compareValue == 2) ? 3 : -3);
+                            score = score + ((compareValue == 2) ? 1 : -1);
                         }
                     }
 
@@ -403,29 +403,68 @@ public class GameManager
     {
         float score = 0;
 
-        for (int y = 0; y < yOfBoard; y++)
+        //swap diagonal check positions
+        for (int i = 0; i < 2; i++)
         {
-
-            int a = currentBoard[3, y, 0];
-            int b = currentBoard[2, y, 1];
-            int c = currentBoard[1, y, 2];
-            int d = currentBoard[0, y, 3];
-
-            int e = currentBoard[0, y, 3];
-            int f = currentBoard[1, y, 2];
-            int g = currentBoard[2, y, 1];
-            int h = currentBoard[3, y, 0];
-
-            if ((a != 0 && (a == b && a == c && a == d)) || (e != 0 && (e == f && e == g && e == h)))
+            for (int y = 0; y < yOfBoard; y++)
             {
-                int compareValue = (a != 0) ? a : e;
-                if (isMaximizer)
+
+                int a;
+                int b;
+                int c;
+                int d;
+
+                if (i == 0)
                 {
-                    score = score + ((compareValue == 1) ? -1000 : 1000);
+                    a = currentBoard[3, y, 0];
+                    b = currentBoard[2, y, 1];
+                    c = currentBoard[1, y, 2];
+                    d = currentBoard[0, y, 3];
                 }
                 else
                 {
-                    score = score + ((compareValue == 2) ? 1000 : -1000);
+                    a = currentBoard[0, y, 3];
+                    b = currentBoard[1, y, 2];
+                    c = currentBoard[2, y, 1];
+                    d = currentBoard[3, y, 0];
+
+                }
+
+                if ((a != 0 && (a == b && a == c && a == d)))
+                {
+                    if (isMaximizer)
+                    {
+                        score = score + ((a == 1) ? -1000 : 1000);
+                    }
+                    else
+                    {
+                        score = score + ((a == 2) ? 1000 : -1000);
+                    }
+                }
+
+                if ((b != 0 && ((a == b && a == c && d == 0) || (b == c && b == d && a == 0))))
+                {
+                    if (isMaximizer)
+                    {
+                        score = score + ((a == 1) ? -5 : 5);
+                    }
+                    else
+                    {
+                        score = score + ((a == 2) ? 5 : -5);
+                    }
+                }
+
+                if ((b != 0 && ((a == b && c == 0 && d == 0) || (b == c && a == 0 && d == 0))) || (c != 0 && c == d && a == 0 && b == 0))
+                {
+                    int compareValue = (b != 0) ? b : c;
+                    if (isMaximizer)
+                    {
+                        score = score + ((compareValue == 1) ? -1 : 1);
+                    }
+                    else
+                    {
+                        score = score + ((compareValue == 2) ? 1 : -1);
+                    }
                 }
             }
         }
@@ -489,24 +528,41 @@ public class GameManager
         }
 
         //diagonal check
-        for (int y = 0; y < yOfBoard; y++)
+        for (int i = 0; i < 2; i++)
         {
-            int a = currentBoard[3, y, 0];
-            int b = currentBoard[2, y, 1];
-            int c = currentBoard[1, y, 2];
-            int d = currentBoard[0, y, 3];
-
-            int e = currentBoard[0, y, 3];
-            int f = currentBoard[1, y, 2];
-            int g = currentBoard[2, y, 1];
-            int h = currentBoard[3, y, 0];
-
-            if ((a != 0 && (a == b && a == c && a == d)) || (e != 0 && (e == f && e == g && e == h)))
+            for (int y = 0; y < yOfBoard; y++)
             {
-                return (a != 0) ? a : e;
-            }
-        }
+                int a;
+                int b;
+                int c;
+                int d;
 
+                if (i == 0)
+                {
+
+                    a = currentBoard[3, y, 0];
+                    b = currentBoard[2, y, 1];
+                    c = currentBoard[1, y, 2];
+                    d = currentBoard[0, y, 3];
+
+                }
+                else
+                {
+
+                    a = currentBoard[0, y, 3];
+                    b = currentBoard[1, y, 2];
+                    c = currentBoard[2, y, 1];
+                    d = currentBoard[3, y, 0];
+
+                }
+
+                if ((a != 0 && (a == b && a == c && a == d)))
+                {
+                    return a;
+                }
+            }
+
+        }
         return 0;
     }
 
