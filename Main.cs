@@ -8,34 +8,42 @@ namespace HelloWorld
         static void Main(string[] args)
         {
             //start a new game with 4 x 4 x 4 board
-            GameManager gm = new GameManager(4, 4, 4);
+            Game gm = new Game(4, 4, 4);
+
+            int playerThatWon = 0;
 
             //loop while there is no winner
-            while (gm.playerThatWon == 0)
+            while (playerThatWon == 0)
             {
-                player1MakeMove(gm);
+                playerThatWon = player1MakeMove(gm);
+
+                if (playerThatWon != 0)
+                {
+                    Console.WriteLine($"{(playerThatWon == 1 ? "Player" : "AI")} won !");
+                }
                 //print board to console
             }
         }
 
-        private static int player1MakeMove(GameManager gm)
+        private static int player1MakeMove(Game gm)
         {
             //call getAIBestMove to get a new Move object (x,y,z coordinates)
-            Move bestMove = gm.getAIBestMove();
+            Move bestMove = gm.ai.getAIBestMove(gm.boardState);
 
             //convert xyz coordinates to slot number
             int aiSlotNum = gm.getSlotNumFromCoordinates(bestMove.xCoordinate, bestMove.yCoordinate, bestMove.zCoordinate);
 
             //AI play a move
-            int aiWinValue = makeMove(gm, aiSlotNum);
-
-            //if there is a winner, return number (1 = player 1 won, 2 = player 2 won) 
-            if (aiWinValue != 0)
-            {
-                return aiWinValue;
-            }
+            bool didAIWon = makeMove(gm, aiSlotNum);
 
             printBoard(gm.boardState);
+
+            //if there is a winner, return number (1 = player 1 won, 2 = player 2 won) 
+            if (didAIWon)
+            {
+                return gm.playerThatWon;
+            }
+
 
             string val = "";
             //get user input for slot to play
@@ -44,14 +52,14 @@ namespace HelloWorld
             int slotNumPlayed = Convert.ToInt32(val);
 
             //player 1 play a move
-            int player1WinValue = makeMove(gm, slotNumPlayed);
-
-            printBoard(gm.boardState);
+            bool didPlayerWon = makeMove(gm, slotNumPlayed);
 
             //if there is a winner, return number (1 = player 1 won, 2 = player 2 won) 
-            if (player1WinValue != 0)
+            printBoard(gm.boardState);
+
+            if (didPlayerWon)
             {
-                return player1WinValue;
+                return gm.playerThatWon;
             }
 
             Console.WriteLine($"best move: {bestMove.xCoordinate}, {bestMove.yCoordinate}, {bestMove.zCoordinate} \n slotNum: {aiSlotNum}");
@@ -61,16 +69,10 @@ namespace HelloWorld
         }
 
         //return 0 if no winning condition is matched after the move, return the player number if winning condiiton is matched
-        private static int makeMove(GameManager gm, int slot)
+        private static bool makeMove(Game gm, int slot)
         {
             gm.takeTurn(slot);
-
-            // //check if anyone won
-            // int winningPlayer = gm.winningConditionCheck() != 0 ? gm.winningConditionCheck() : 0;
-
-            // //if there is a winner, return number (1 = player 1 won, 2 = player 2 won) 
-            // return winningPlayer;
-            return 0;
+            return gm.didSomeoneWonTheGame();
         }
 
         //print board to console
