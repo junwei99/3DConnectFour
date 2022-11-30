@@ -197,6 +197,89 @@ public class AIEngine
             }
 
         }
+
+        //swap diagonal check positions
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < currentBoard.GetLength(0); j++)
+            {
+                int a = 0;
+                int b = 0;
+                int c = 0;
+                int d = 0;
+
+                switch (i)
+                {
+                    case 0:
+                        a = currentBoard[3, j, 0];
+                        b = currentBoard[2, j, 1];
+                        c = currentBoard[1, j, 2];
+                        d = currentBoard[0, j, 3];
+                        break;
+                    case 1:
+                        a = currentBoard[0, j, 3];
+                        b = currentBoard[1, j, 2];
+                        c = currentBoard[2, j, 1];
+                        d = currentBoard[3, j, 0];
+                        break;
+                    case 2:
+                        a = currentBoard[j, 0, 3];
+                        b = currentBoard[j, 1, 2];
+                        c = currentBoard[j, 2, 1];
+                        d = currentBoard[j, 3, 0];
+                        break;
+                    case 3:
+                        a = currentBoard[j, 3, 0];
+                        b = currentBoard[j, 2, 1];
+                        c = currentBoard[j, 1, 2];
+                        d = currentBoard[j, 0, 3];
+                        break;
+                    case 4:
+                        a = currentBoard[3, 0, j];
+                        b = currentBoard[2, 1, j];
+                        c = currentBoard[1, 2, j];
+                        d = currentBoard[0, 3, j];
+                        break;
+                    case 5:
+                        a = currentBoard[0, 3, j];
+                        b = currentBoard[1, 2, j];
+                        c = currentBoard[2, 1, j];
+                        d = currentBoard[3, 0, j];
+                        break;
+                    case 6:
+                        a = currentBoard[0, 0, 0];
+                        b = currentBoard[1, 1, 1];
+                        c = currentBoard[2, 2, 2];
+                        d = currentBoard[3, 3, 3];
+                        //0,0,0 -> 1,1,1 --> 2,2,2 -> 3,3,3
+                        break;
+                    case 7:
+                        a = currentBoard[0, 3, 0];
+                        b = currentBoard[1, 2, 1];
+                        c = currentBoard[2, 1, 2];
+                        d = currentBoard[3, 0, 3];
+                        break;
+                    case 8:
+                        a = currentBoard[3, 0, 0];
+                        b = currentBoard[2, 1, 1];
+                        c = currentBoard[1, 2, 2];
+                        d = currentBoard[0, 3, 3];
+                        break;
+                    case 9:
+                        a = currentBoard[0, 0, 3];
+                        b = currentBoard[1, 1, 2];
+                        c = currentBoard[2, 2, 1];
+                        d = currentBoard[3, 3, 0];
+                        break;
+                }
+
+                if ((a != 0 && (a == b && a == c && a == d)))
+                {
+                    return a;
+                }
+            }
+        }
+
         return 0;
     }
 
@@ -221,10 +304,10 @@ public class AIEngine
             {
                 for (int z = 0; z < currentBoard.GetLength(2); z++)
                 {
-                    int a;
-                    int b;
-                    int c;
-                    int d;
+                    int a = 0;
+                    int b = 0;
+                    int c = 0;
+                    int d = 0;
 
                     if (i == 0)
                     {
@@ -246,11 +329,11 @@ public class AIEngine
                     {
                         if (isMaximizer)
                         {
-                            score = score + ((a == 1) ? -1000 : 1000);
+                            score += ((a == 1) ? -1000 : 1000);
                         }
                         else
                         {
-                            score = score + ((a == 2) ? 1000 : -1000);
+                            score += ((a == 2) ? 1000 : -1000);
                         }
                     }
 
@@ -262,11 +345,11 @@ public class AIEngine
 
                         if (isMaximizer)
                         {
-                            score = score + ((compareValue == 1) ? -5 : 5);
+                            score += ((compareValue == 1) ? -5 : 5);
                         }
                         else
                         {
-                            score = score + ((compareValue == 2) ? 5 : -5);
+                            score += ((compareValue == 2) ? 5 : -5);
                         }
                     }
 
@@ -276,11 +359,11 @@ public class AIEngine
                         int compareValue = (a != 0) ? a : c;
                         if (isMaximizer)
                         {
-                            score = score + ((compareValue == 1) ? -1 : 1);
+                            score += ((compareValue == 1) ? -1 : 1);
                         }
                         else
                         {
-                            score = score + ((compareValue == 2) ? 1 : -1);
+                            score += ((compareValue == 2) ? 1 : -1);
                         }
                     }
 
@@ -290,11 +373,11 @@ public class AIEngine
                         int compareValue = (b != 1) ? b : c;
                         if (isMaximizer)
                         {
-                            score = score + ((compareValue == 1) ? -1 : 1);
+                            score += ((compareValue == 1) ? -1 : 1);
                         }
                         else
                         {
-                            score = score + ((compareValue == 2) ? 1 : -1);
+                            score += ((compareValue == 2) ? 1 : -1);
                         }
                     }
 
@@ -324,11 +407,11 @@ public class AIEngine
                     {
                         if (isMaximizer)
                         {
-                            score = score + ((a == 1) ? -1000 : 1000);
+                            score += ((a == 1) ? -1000 : 1000);
                         }
                         else
                         {
-                            score = score + ((a == 2) ? 1000 : -1000);
+                            score += ((a == 2) ? 1000 : -1000);
                         }
                     }
 
@@ -337,11 +420,11 @@ public class AIEngine
                     {
                         if (isMaximizer)
                         {
-                            score = score + ((a == 1) ? -5 : 5);
+                            score += ((a == 1) ? -5 : 5);
                         }
                         else
                         {
-                            score = score + ((a == 2) ? 5 : -5);
+                            score += ((a == 2) ? 5 : -5);
                         }
                     }
 
@@ -350,11 +433,11 @@ public class AIEngine
                     {
                         if (isMaximizer)
                         {
-                            score = score + ((a == 1) ? -1 : 1);
+                            score += ((a == 1) ? -1 : 1);
                         }
                         else
                         {
-                            score = score + ((a == 2) ? 1 : -1);
+                            score += ((a == 2) ? 1 : -1);
                         }
                     }
                 }
@@ -447,11 +530,11 @@ public class AIEngine
                 {
                     if (isMaximizer)
                     {
-                        score = score + ((a == 1) ? -1000 : 1000);
+                        score += ((a == 1) ? -1000 : 1000);
                     }
                     else
                     {
-                        score = score + ((a == 2) ? 1000 : -1000);
+                        score += ((a == 2) ? 1000 : -1000);
                     }
                 }
 
@@ -459,11 +542,11 @@ public class AIEngine
                 {
                     if (isMaximizer)
                     {
-                        score = score + ((a == 1) ? -5 : 5);
+                        score += ((a == 1) ? -5 : 5);
                     }
                     else
                     {
-                        score = score + ((a == 2) ? 5 : -5);
+                        score += ((a == 2) ? 5 : -5);
                     }
                 }
 
@@ -472,11 +555,11 @@ public class AIEngine
                     int compareValue = (b != 0) ? b : c;
                     if (isMaximizer)
                     {
-                        score = score + ((compareValue == 1) ? -1 : 1);
+                        score += ((compareValue == 1) ? -1 : 1);
                     }
                     else
                     {
-                        score = score + ((compareValue == 2) ? 1 : -1);
+                        score += ((compareValue == 2) ? 1 : -1);
                     }
                 }
             }
