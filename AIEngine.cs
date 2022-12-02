@@ -322,63 +322,7 @@ public class AIEngine
                         d = currentBoard[z, y, 3];
                     }
 
-                    //all 4 is checked
-                    if (a != 0 && a == b && a == c && a == d)
-                    {
-                        if (isMaximizer)
-                        {
-                            score += ((a == 1) ? -1000 : 1000);
-                        }
-                        else
-                        {
-                            score += ((a == 2) ? 1000 : -1000);
-                        }
-                    }
-
-                    //3 out of 4 checked
-                    if ((b != 0) && (a == b && a == c && d == 0) || (a == 0 && b == c && b == d))
-                    {
-
-                        int compareValue = (a != 0) ? a : b;
-
-                        if (isMaximizer)
-                        {
-                            score += ((compareValue == 1) ? -5 : 5);
-                        }
-                        else
-                        {
-                            score += ((compareValue == 2) ? 5 : -5);
-                        }
-                    }
-
-                    //2 out of 4 checked
-                    if ((a != 0 && a == b && c == 0 && d == 0) || ((c != 0) && (c == d && a == 0 && b == 0) || (b == c && a == 0 && d == 0)))
-                    {
-                        int compareValue = (a != 0) ? a : c;
-                        if (isMaximizer)
-                        {
-                            score += ((compareValue == 1) ? -1 : 1);
-                        }
-                        else
-                        {
-                            score += ((compareValue == 2) ? 1 : -1);
-                        }
-                    }
-
-                    //1 checked in middle (advantageous spot)
-                    if ((z == 1 || z == 2) && ((b != 0 && a == 0 && c == 0 && d == 0) || (c != 0 && a == 0 && b == 0 && d == 0)))
-                    {
-                        int compareValue = (b != 1) ? b : c;
-                        if (isMaximizer)
-                        {
-                            score += ((compareValue == 1) ? -1 : 1);
-                        }
-                        else
-                        {
-                            score += ((compareValue == 2) ? 1 : -1);
-                        }
-                    }
-
+                    score += Helper.getHorizontalCheckingScore(a, b, c, d, z, isMaximizer);
                 }
             }
         }
@@ -398,48 +342,7 @@ public class AIEngine
                 int c = currentBoard[x, 2, z];
                 int d = currentBoard[x, 3, z];
 
-                if (a != 0)
-                {
-                    //all 4 is checked
-                    if (a == b && a == c && a == d)
-                    {
-                        if (isMaximizer)
-                        {
-                            score += ((a == 1) ? -1000 : 1000);
-                        }
-                        else
-                        {
-                            score += ((a == 2) ? 1000 : -1000);
-                        }
-                    }
-
-                    //3 is checked
-                    if (a == b && a == c && d == 0)
-                    {
-                        if (isMaximizer)
-                        {
-                            score += ((a == 1) ? -5 : 5);
-                        }
-                        else
-                        {
-                            score += ((a == 2) ? 5 : -5);
-                        }
-                    }
-
-                    //2 out of 4 checked
-                    if (a == b && c == 0 && d == 0)
-                    {
-                        if (isMaximizer)
-                        {
-                            score += ((a == 1) ? -1 : 1);
-                        }
-                        else
-                        {
-                            score += ((a == 2) ? 1 : -1);
-                        }
-                    }
-                }
-
+                score += Helper.getVerticalCheckingScore(a, b, c, d, isMaximizer);
             }
         }
         return score;
