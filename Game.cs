@@ -60,11 +60,14 @@ public class Game
     {
         int winnerValue = ai.getWinnerValue(boardState);
 
-        if (winnerValue != 0)
+        if (winnerValue != 0 && DebugConfig.shouldGameEndAfterWinningMove)
         {
             playerThatWon = winnerValue;
             return true;
         }
+
+        if (winnerValue != 0 && !DebugConfig.shouldGameEndAfterWinningMove) Console.WriteLine($"DEBUG MODE: {(winnerValue == 1 ? "PLAYER" : "AI")} WON");
+
         return false;
     }
 }

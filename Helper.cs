@@ -1,32 +1,46 @@
-// class WinCheckCoordinates
-// {
-//     int a = 0;
-//     int b = 0;
-//     int c = 0;
-//     int d = 0;
+public static class Helper
+{
+    public static float getDiagonalCheckingScore(int a, int b, int c, int d, bool isMaximizer)
+    {
+        float diagonalCheckingScore = 0;
 
-//     public WinCheckCoordinates(int _a, int _b, int _c, int _d)
-//     {
-//         a = _a;
-//         b = _b;
-//         c = _c;
-//         d = _d;
-//     }
-// }
+        if ((a != 0 && (a == b && a == c && a == d)))
+        {
+            if (isMaximizer)
+            {
+                diagonalCheckingScore += ((a == 1) ? -1000 : 1000);
+            }
+            else
+            {
+                diagonalCheckingScore += ((a == 2) ? 1000 : -1000);
+            }
+        }
 
-// public class Helper
-// {
+        if ((b != 0 && ((a == b && a == c && d == 0) || (b == c && b == d && a == 0))))
+        {
+            if (isMaximizer)
+            {
+                diagonalCheckingScore += ((a == 1) ? -5 : 5);
+            }
+            else
+            {
+                diagonalCheckingScore += ((a == 2) ? 5 : -5);
+            }
+        }
 
-//     public WinCheckCoordinates getWinCheckCoordinates()
-//     {
+        if ((b != 0 && ((a == b && c == 0 && d == 0) || (b == c && a == 0 && d == 0))) || (c != 0 && c == d && a == 0 && b == 0))
+        {
+            int compareValue = (b != 0) ? b : c;
+            if (isMaximizer)
+            {
+                diagonalCheckingScore += ((compareValue == 1) ? -1 : 1);
+            }
+            else
+            {
+                diagonalCheckingScore += ((compareValue == 2) ? 1 : -1);
+            }
+        }
 
-
-
-
-
-//         return winCheckCoordinates;
-//     }
-
-
-
-// }
+        return diagonalCheckingScore;
+    }
+}

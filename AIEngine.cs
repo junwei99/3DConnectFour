@@ -41,10 +41,11 @@ public class AIEngine
         return bestMove;
     }
 
-    float minimax(int[,,] board, int searchDepth, bool isMaximizer)
+    private float minimax(int[,,] board, int searchDepth, bool isMaximizer)
     {
         float bestScore = 0;
-        int winner = getWinnerValue(board);
+        //for debugging purposes (turn off winning condition in terminal node to ease the debugging process for each method of checking e.g vertical checking or horizontal checking) 
+        int winner = DebugConfig.TypeOfCheckingToDebug == DebugConfig.NoneStrValue ? getWinnerValue(board) : 0;
 
         if (searchDepth == 0 || winner != 0)
         {
@@ -283,18 +284,18 @@ public class AIEngine
         return 0;
     }
 
-    float evaluateBoard(int[,,] currentBoard, bool isMaximizer)
+    private float evaluateBoard(int[,,] currentBoard, bool isMaximizer)
     {
         float boardScore = 0;
-        boardScore += horizontalChecking(currentBoard, isMaximizer);
-        boardScore += verticalChecking(currentBoard, isMaximizer);
-        boardScore += diagonalCheck(currentBoard, isMaximizer);
+        if (DebugConfig.shouldCheckHorizontal) boardScore += horizontalChecking(currentBoard, isMaximizer);
+        if (DebugConfig.shouldCheckHorizontal) boardScore += verticalChecking(currentBoard, isMaximizer);
+        if (DebugConfig.shouldCheckDiagonal) boardScore += diagonalCheck(currentBoard, isMaximizer);
 
         return boardScore;
     }
 
     //check if there is any horizontal checking winning condition matched, return 0 for game continues without winner, 1 for player 1 won, 2 for player 2 won
-    float horizontalChecking(int[,,] currentBoard, bool isMaximizer)
+    private float horizontalChecking(int[,,] currentBoard, bool isMaximizer)
     {
         float score = 0;
 
@@ -387,7 +388,7 @@ public class AIEngine
         return score;
     }
 
-    float verticalChecking(int[,,] currentBoard, bool isMaximizer)
+    private float verticalChecking(int[,,] currentBoard, bool isMaximizer)
     {
         float score = 0;
 
@@ -447,58 +448,21 @@ public class AIEngine
         return score;
     }
 
-    float diagonalCheck(int[,,] currentBoard, bool isMaximizer)
+    private float diagonalCheck(int[,,] currentBoard, bool isMaximizer)
     {
         float score = 0;
 
-        //swap diagonal check positions
+        int a = 0;
+        int b = 0;
+        int c = 0;
+        int d = 0;
+
         for (int i = 0; i < 10; i++)
         {
-            for (int j = 0; j < currentBoard.GetLength(0); j++)
+            if (i > 5 && i < 10)
             {
-                int a = 0;
-                int b = 0;
-                int c = 0;
-                int d = 0;
-
                 switch (i)
                 {
-                    case 0:
-                        a = currentBoard[3, j, 0];
-                        b = currentBoard[2, j, 1];
-                        c = currentBoard[1, j, 2];
-                        d = currentBoard[0, j, 3];
-                        break;
-                    case 1:
-                        a = currentBoard[0, j, 3];
-                        b = currentBoard[1, j, 2];
-                        c = currentBoard[2, j, 1];
-                        d = currentBoard[3, j, 0];
-                        break;
-                    case 2:
-                        a = currentBoard[j, 0, 3];
-                        b = currentBoard[j, 1, 2];
-                        c = currentBoard[j, 2, 1];
-                        d = currentBoard[j, 3, 0];
-                        break;
-                    case 3:
-                        a = currentBoard[j, 3, 0];
-                        b = currentBoard[j, 2, 1];
-                        c = currentBoard[j, 1, 2];
-                        d = currentBoard[j, 0, 3];
-                        break;
-                    case 4:
-                        a = currentBoard[3, 0, j];
-                        b = currentBoard[2, 1, j];
-                        c = currentBoard[1, 2, j];
-                        d = currentBoard[0, 3, j];
-                        break;
-                    case 5:
-                        a = currentBoard[0, 3, j];
-                        b = currentBoard[1, 2, j];
-                        c = currentBoard[2, 1, j];
-                        d = currentBoard[3, 0, j];
-                        break;
                     case 6:
                         a = currentBoard[0, 0, 0];
                         b = currentBoard[1, 1, 1];
@@ -524,47 +488,63 @@ public class AIEngine
                         c = currentBoard[2, 2, 1];
                         d = currentBoard[3, 3, 0];
                         break;
+                    default:
+                        break;
                 }
 
-                if ((a != 0 && (a == b && a == c && a == d)))
+                score += Helper.getDiagonalCheckingScore(a, b, c, d, isMaximizer);
+            }
+            else
+            {
+                for (int j = 0; j < currentBoard.GetLength(0); j++)
                 {
-                    if (isMaximizer)
+                    switch (j)
                     {
-                        score += ((a == 1) ? -1000 : 1000);
+                        case 0:
+                            a = currentBoard[3, j, 0];
+                            b = currentBoard[2, j, 1];
+                            c = currentBoard[1, j, 2];
+                            d = currentBoard[0, j, 3];
+                            break;
+                        case 1:
+                            a = currentBoard[0, j, 3];
+                            b = currentBoard[1, j, 2];
+                            c = currentBoard[2, j, 1];
+                            d = currentBoard[3, j, 0];
+                            break;
+                        case 2:
+                            a = currentBoard[j, 0, 3];
+                            b = currentBoard[j, 1, 2];
+                            c = currentBoard[j, 2, 1];
+                            d = currentBoard[j, 3, 0];
+                            break;
+                        case 3:
+                            a = currentBoard[j, 3, 0];
+                            b = currentBoard[j, 2, 1];
+                            c = currentBoard[j, 1, 2];
+                            d = currentBoard[j, 0, 3];
+                            break;
+                        case 4:
+                            a = currentBoard[3, 0, j];
+                            b = currentBoard[2, 1, j];
+                            c = currentBoard[1, 2, j];
+                            d = currentBoard[0, 3, j];
+                            break;
+                        case 5:
+                            a = currentBoard[0, 3, j];
+                            b = currentBoard[1, 2, j];
+                            c = currentBoard[2, 1, j];
+                            d = currentBoard[3, 0, j];
+                            break;
+                        default:
+                            break;
                     }
-                    else
-                    {
-                        score += ((a == 2) ? 1000 : -1000);
-                    }
-                }
 
-                if ((b != 0 && ((a == b && a == c && d == 0) || (b == c && b == d && a == 0))))
-                {
-                    if (isMaximizer)
-                    {
-                        score += ((a == 1) ? -5 : 5);
-                    }
-                    else
-                    {
-                        score += ((a == 2) ? 5 : -5);
-                    }
-                }
-
-                if ((b != 0 && ((a == b && c == 0 && d == 0) || (b == c && a == 0 && d == 0))) || (c != 0 && c == d && a == 0 && b == 0))
-                {
-                    int compareValue = (b != 0) ? b : c;
-                    if (isMaximizer)
-                    {
-                        score += ((compareValue == 1) ? -1 : 1);
-                    }
-                    else
-                    {
-                        score += ((compareValue == 2) ? 1 : -1);
-                    }
+                    score += Helper.getDiagonalCheckingScore(a, b, c, d, isMaximizer);
                 }
             }
         }
-
         return score;
     }
+
 }

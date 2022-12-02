@@ -21,7 +21,6 @@ namespace HelloWorld
                 {
                     Console.WriteLine($"{(playerThatWon == 1 ? "Player" : "AI")} won !");
                 }
-                //print board to console
             }
         }
 
