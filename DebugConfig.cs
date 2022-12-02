@@ -5,9 +5,11 @@ public static class DebugConfig
         HorizontalStrValue = "horizontal",
         VerticalStrValue = "vertical",
         DiagonalStrValue = "diagonal";
-    public const string TypeOfCheckingToDebug = DiagonalStrValue;
+
+    public const bool isDebugMode = true;
+    public const string TypeOfCheckingToDebug = isDebugMode ? DiagonalStrValue : NoneStrValue;
     //should game end after there is a winner
-    public const bool shouldGameEndAfterWinningMove = false;
+    public const bool shouldGameEndAfterWinningMove = isDebugMode ? false : true;
     public static bool shouldCheckHorizontal = (TypeOfCheckingToDebug == NoneStrValue) || (TypeOfCheckingToDebug == HorizontalStrValue);
     public static bool shouldCheckVertical = (TypeOfCheckingToDebug == NoneStrValue) || (TypeOfCheckingToDebug == VerticalStrValue);
     public static bool shouldCheckDiagonal = (TypeOfCheckingToDebug == NoneStrValue) || (TypeOfCheckingToDebug == DiagonalStrValue);

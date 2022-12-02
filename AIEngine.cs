@@ -45,7 +45,7 @@ public class AIEngine
     {
         float bestScore = 0;
         //for debugging purposes (turn off winning condition in terminal node to ease the debugging process for each method of checking e.g vertical checking or horizontal checking) 
-        int winner = DebugConfig.TypeOfCheckingToDebug == DebugConfig.NoneStrValue ? getWinnerValue(board) : 0;
+        int winner = getWinnerValue(board);
 
         if (searchDepth == 0 || winner != 0)
         {
@@ -114,32 +114,55 @@ public class AIEngine
     public int getWinnerValue(int[,,] currentBoard)
     {
         //horizontal check
-        for (int i = 0; i < 2; i++)
+        if (DebugConfig.shouldCheckHorizontal)
         {
-            for (int y = 0; y < currentBoard.GetLength(1); y++)
+            for (int i = 0; i < 2; i++)
             {
-                for (int xOrZ = 0; xOrZ < currentBoard.GetLength(0); xOrZ++)
+                for (int y = 0; y < currentBoard.GetLength(1); y++)
                 {
-                    int a;
-                    int b;
-                    int c;
-                    int d;
-                    //if i is 0, xOrZ will represent x
-                    if (i == 0)
+                    for (int xOrZ = 0; xOrZ < currentBoard.GetLength(0); xOrZ++)
                     {
-                        a = currentBoard[xOrZ, y, 0];
-                        b = currentBoard[xOrZ, y, 1];
-                        c = currentBoard[xOrZ, y, 2];
-                        d = currentBoard[xOrZ, y, 3];
+                        int a;
+                        int b;
+                        int c;
+                        int d;
+                        //if i is 0, xOrZ will represent x
+                        if (i == 0)
+                        {
+                            a = currentBoard[xOrZ, y, 0];
+                            b = currentBoard[xOrZ, y, 1];
+                            c = currentBoard[xOrZ, y, 2];
+                            d = currentBoard[xOrZ, y, 3];
+                        }
+                        //if i is 1, xOrZ will represent z
+                        else
+                        {
+                            a = currentBoard[0, y, xOrZ];
+                            b = currentBoard[1, y, xOrZ];
+                            c = currentBoard[2, y, xOrZ];
+                            d = currentBoard[3, y, xOrZ];
+                        }
+
+                        if ((a != 0) && (a == b && a == c && a == d))
+                        {
+                            return a;
+                        }
                     }
-                    //if i is 1, xOrZ will represent z
-                    else
-                    {
-                        a = currentBoard[0, y, xOrZ];
-                        b = currentBoard[1, y, xOrZ];
-                        c = currentBoard[2, y, xOrZ];
-                        d = currentBoard[3, y, xOrZ];
-                    }
+                }
+            }
+        }
+
+        if (DebugConfig.shouldCheckVertical)
+        {
+            //vertical check
+            for (int x = 0; x < currentBoard.GetLength(0); x++)
+            {
+                for (int z = 0; z < currentBoard.GetLength(2); z++)
+                {
+                    int a = currentBoard[x, 0, z];
+                    int b = currentBoard[x, 1, z];
+                    int c = currentBoard[x, 2, z];
+                    int d = currentBoard[x, 3, z];
 
                     if ((a != 0) && (a == b && a == c && a == d))
                     {
@@ -149,138 +172,112 @@ public class AIEngine
             }
         }
 
-        //vertical check
-        for (int x = 0; x < currentBoard.GetLength(0); x++)
+        if (DebugConfig.shouldCheckDiagonal)
         {
-            for (int z = 0; z < currentBoard.GetLength(2); z++)
+            //swap diagonal check positions
+            for (int i = 0; i < 10; i++)
             {
-                int a = currentBoard[x, 0, z];
-                int b = currentBoard[x, 1, z];
-                int c = currentBoard[x, 2, z];
-                int d = currentBoard[x, 3, z];
 
-                if ((a != 0) && (a == b && a == c && a == d))
-                {
-                    return a;
-                }
-            }
-        }
-
-        //diagonal check
-        for (int i = 0; i < 2; i++)
-        {
-            for (int y = 0; y < currentBoard.GetLength(1); y++)
-            {
-                int a;
-                int b;
-                int c;
-                int d;
-
-                if (i == 0)
-                {
-                    a = currentBoard[3, y, 0];
-                    b = currentBoard[2, y, 1];
-                    c = currentBoard[1, y, 2];
-                    d = currentBoard[0, y, 3];
-                }
-                else
-                {
-                    a = currentBoard[0, y, 3];
-                    b = currentBoard[1, y, 2];
-                    c = currentBoard[2, y, 1];
-                    d = currentBoard[3, y, 0];
-                }
-
-                if ((a != 0 && (a == b && a == c && a == d)))
-                {
-                    return a;
-                }
-            }
-
-        }
-
-        //swap diagonal check positions
-        for (int i = 0; i < 10; i++)
-        {
-            for (int j = 0; j < currentBoard.GetLength(0); j++)
-            {
                 int a = 0;
                 int b = 0;
                 int c = 0;
                 int d = 0;
 
-                switch (i)
+                if (i > 5 && i < 10)
                 {
-                    case 0:
-                        a = currentBoard[3, j, 0];
-                        b = currentBoard[2, j, 1];
-                        c = currentBoard[1, j, 2];
-                        d = currentBoard[0, j, 3];
-                        break;
-                    case 1:
-                        a = currentBoard[0, j, 3];
-                        b = currentBoard[1, j, 2];
-                        c = currentBoard[2, j, 1];
-                        d = currentBoard[3, j, 0];
-                        break;
-                    case 2:
-                        a = currentBoard[j, 0, 3];
-                        b = currentBoard[j, 1, 2];
-                        c = currentBoard[j, 2, 1];
-                        d = currentBoard[j, 3, 0];
-                        break;
-                    case 3:
-                        a = currentBoard[j, 3, 0];
-                        b = currentBoard[j, 2, 1];
-                        c = currentBoard[j, 1, 2];
-                        d = currentBoard[j, 0, 3];
-                        break;
-                    case 4:
-                        a = currentBoard[3, 0, j];
-                        b = currentBoard[2, 1, j];
-                        c = currentBoard[1, 2, j];
-                        d = currentBoard[0, 3, j];
-                        break;
-                    case 5:
-                        a = currentBoard[0, 3, j];
-                        b = currentBoard[1, 2, j];
-                        c = currentBoard[2, 1, j];
-                        d = currentBoard[3, 0, j];
-                        break;
-                    case 6:
-                        a = currentBoard[0, 0, 0];
-                        b = currentBoard[1, 1, 1];
-                        c = currentBoard[2, 2, 2];
-                        d = currentBoard[3, 3, 3];
-                        //0,0,0 -> 1,1,1 --> 2,2,2 -> 3,3,3
-                        break;
-                    case 7:
-                        a = currentBoard[0, 3, 0];
-                        b = currentBoard[1, 2, 1];
-                        c = currentBoard[2, 1, 2];
-                        d = currentBoard[3, 0, 3];
-                        break;
-                    case 8:
-                        a = currentBoard[3, 0, 0];
-                        b = currentBoard[2, 1, 1];
-                        c = currentBoard[1, 2, 2];
-                        d = currentBoard[0, 3, 3];
-                        break;
-                    case 9:
-                        a = currentBoard[0, 0, 3];
-                        b = currentBoard[1, 1, 2];
-                        c = currentBoard[2, 2, 1];
-                        d = currentBoard[3, 3, 0];
-                        break;
+                    switch (i)
+                    {
+
+                        case 6:
+                            a = currentBoard[0, 0, 0];
+                            b = currentBoard[1, 1, 1];
+                            c = currentBoard[2, 2, 2];
+                            d = currentBoard[3, 3, 3];
+                            //0,0,0 -> 1,1,1 --> 2,2,2 -> 3,3,3
+                            break;
+                        case 7:
+                            a = currentBoard[0, 3, 0];
+                            b = currentBoard[1, 2, 1];
+                            c = currentBoard[2, 1, 2];
+                            d = currentBoard[3, 0, 3];
+                            break;
+                        case 8:
+                            a = currentBoard[3, 0, 0];
+                            b = currentBoard[2, 1, 1];
+                            c = currentBoard[1, 2, 2];
+                            d = currentBoard[0, 3, 3];
+                            break;
+                        case 9:
+                            a = currentBoard[0, 0, 3];
+                            b = currentBoard[1, 1, 2];
+                            c = currentBoard[2, 2, 1];
+                            d = currentBoard[3, 3, 0];
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if ((a != 0 && (a == b && a == c && a == d)))
+                    {
+                        return a;
+                    }
+                }
+                else
+                {
+                    for (int j = 0; j < currentBoard.GetLength(0); j++)
+                    {
+
+                        switch (i)
+                        {
+                            case 0:
+                                a = currentBoard[3, j, 0];
+                                b = currentBoard[2, j, 1];
+                                c = currentBoard[1, j, 2];
+                                d = currentBoard[0, j, 3];
+                                break;
+                            case 1:
+                                a = currentBoard[0, j, 0];
+                                b = currentBoard[1, j, 1];
+                                c = currentBoard[2, j, 2];
+                                d = currentBoard[3, j, 3];
+                                break;
+                            case 2:
+                                a = currentBoard[j, 0, 3];
+                                b = currentBoard[j, 1, 2];
+                                c = currentBoard[j, 2, 1];
+                                d = currentBoard[j, 3, 0];
+                                break;
+                            case 3:
+                                a = currentBoard[j, 0, 0];
+                                b = currentBoard[j, 1, 1];
+                                c = currentBoard[j, 2, 2];
+                                d = currentBoard[j, 3, 3];
+                                break;
+                            case 4:
+                                a = currentBoard[3, 0, j];
+                                b = currentBoard[2, 1, j];
+                                c = currentBoard[1, 2, j];
+                                d = currentBoard[0, 3, j];
+                                break;
+                            case 5:
+                                a = currentBoard[0, 0, j];
+                                b = currentBoard[1, 1, j];
+                                c = currentBoard[2, 2, j];
+                                d = currentBoard[3, 3, j];
+                                break;
+                            default:
+                                break;
+                        }
+
+                        if ((a != 0 && (a == b && a == c && a == d)))
+                        {
+                            return a;
+                        }
+                    }
                 }
 
-                if ((a != 0 && (a == b && a == c && a == d)))
-                {
-                    return a;
-                }
             }
         }
-
         return 0;
     }
 
@@ -288,7 +285,7 @@ public class AIEngine
     {
         float boardScore = 0;
         if (DebugConfig.shouldCheckHorizontal) boardScore += horizontalChecking(currentBoard, isMaximizer);
-        if (DebugConfig.shouldCheckHorizontal) boardScore += verticalChecking(currentBoard, isMaximizer);
+        if (DebugConfig.shouldCheckVertical) boardScore += verticalChecking(currentBoard, isMaximizer);
         if (DebugConfig.shouldCheckDiagonal) boardScore += diagonalCheck(currentBoard, isMaximizer);
 
         return boardScore;
@@ -507,10 +504,10 @@ public class AIEngine
                             d = currentBoard[0, j, 3];
                             break;
                         case 1:
-                            a = currentBoard[0, j, 3];
-                            b = currentBoard[1, j, 2];
-                            c = currentBoard[2, j, 1];
-                            d = currentBoard[3, j, 0];
+                            a = currentBoard[0, j, 0];
+                            b = currentBoard[1, j, 1];
+                            c = currentBoard[2, j, 2];
+                            d = currentBoard[3, j, 3];
                             break;
                         case 2:
                             a = currentBoard[j, 0, 3];
@@ -519,10 +516,10 @@ public class AIEngine
                             d = currentBoard[j, 3, 0];
                             break;
                         case 3:
-                            a = currentBoard[j, 3, 0];
-                            b = currentBoard[j, 2, 1];
-                            c = currentBoard[j, 1, 2];
-                            d = currentBoard[j, 0, 3];
+                            a = currentBoard[j, 0, 0];
+                            b = currentBoard[j, 1, 1];
+                            c = currentBoard[j, 2, 2];
+                            d = currentBoard[j, 3, 3];
                             break;
                         case 4:
                             a = currentBoard[3, 0, j];
@@ -531,10 +528,10 @@ public class AIEngine
                             d = currentBoard[0, 3, j];
                             break;
                         case 5:
-                            a = currentBoard[0, 3, j];
-                            b = currentBoard[1, 2, j];
-                            c = currentBoard[2, 1, j];
-                            d = currentBoard[3, 0, j];
+                            a = currentBoard[0, 0, j];
+                            b = currentBoard[1, 1, j];
+                            c = currentBoard[2, 2, j];
+                            d = currentBoard[3, 3, j];
                             break;
                         default:
                             break;

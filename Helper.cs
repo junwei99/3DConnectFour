@@ -1,5 +1,25 @@
 public static class Helper
 {
+    public static bool isNOutOfFourChecked(int amountOfCheckedSlot, int a, int b, int c, int d)
+    {
+        int[] coordinateList = { a, b, c, d };
+
+        int[] uniqueCoordinateList = coordinateList.Distinct().ToArray();
+
+        //if there is empty space, player and AI moves in the coordinates
+        if (uniqueCoordinateList.Length < 3)
+        {
+            //find the coordinate value (PLAYER or AI) that is checked
+            int nonEmptyValue = Array.Find(coordinateList, coordinate => coordinate != 0);
+            //find all the coordinate that is not zero (empty)
+            int[] coordinateListToCheck = Array.FindAll(coordinateList, coordinate => coordinate == nonEmptyValue);
+            return coordinateListToCheck.Length == amountOfCheckedSlot ? true : false;
+        }
+        else
+        {
+            return false;
+        }
+    }
     public static float getDiagonalCheckingScore(int a, int b, int c, int d, bool isMaximizer)
     {
         float diagonalCheckingScore = 0;

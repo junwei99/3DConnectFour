@@ -66,7 +66,7 @@ public class Game
             return true;
         }
 
-        if (winnerValue != 0 && !DebugConfig.shouldGameEndAfterWinningMove) Console.WriteLine($"DEBUG MODE: {(winnerValue == 1 ? "PLAYER" : "AI")} WON");
+        if (winnerValue != 0 && (DebugConfig.shouldGameEndAfterWinningMove == false)) Console.WriteLine($"DEBUG MODE: {(winnerValue == 1 ? "PLAYER" : "AI")} WON");
 
         return false;
     }
