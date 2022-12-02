@@ -112,11 +112,11 @@ public static class Helper
 
             if (isMaximizer)
             {
-                horizontalCheckingScore += ((compareValue == 1) ? -5 : 5);
+                horizontalCheckingScore += ((playerThatChecks3OutOf4 == 1) ? -5 : 5);
             }
             else
             {
-                horizontalCheckingScore += ((compareValue == 2) ? 5 : -5);
+                horizontalCheckingScore += ((playerThatChecks3OutOf4 == 2) ? 5 : -5);
             }
         }
 
@@ -127,11 +127,11 @@ public static class Helper
             int compareValue = (a != 0) ? a : c;
             if (isMaximizer)
             {
-                horizontalCheckingScore += ((compareValue == 1) ? -1 : 1);
+                horizontalCheckingScore += ((playerThatChecks2OutOf4 == 1) ? -1 : 1);
             }
             else
             {
-                horizontalCheckingScore += ((compareValue == 2) ? 1 : -1);
+                horizontalCheckingScore += ((playerThatChecks2OutOf4 == 2) ? 1 : -1);
             }
         }
 

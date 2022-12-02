@@ -12,7 +12,7 @@ namespace HelloWorld
 
             int playerThatWon = 0;
 
-            Console.WriteLine($"{DebugConfig.isDebugMode}, {DebugConfig.TypeOfCheckingToDebug}, {DebugConfig.shouldGameEndAfterWinningMove}");
+            Console.WriteLine($"{DebugConfig.shouldCheckHorizontal},{DebugConfig.shouldCheckVertical},{DebugConfig.shouldCheckDiagonal}");
 
             //loop while there is no winner
             while (playerThatWon == 0)

@@ -6,7 +6,7 @@ public static class DebugConfig
         VerticalStrValue = "vertical",
         DiagonalStrValue = "diagonal";
 
-    public const bool isDebugMode = true;
+    public const bool isDebugMode = false;
     public const string TypeOfCheckingToDebug = isDebugMode ? HorizontalStrValue : NoneStrValue;
     //should game end after there is a winner
     public const bool shouldGameEndAfterWinningMove = isDebugMode ? false : true;
