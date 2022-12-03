@@ -1,56 +1,6 @@
 public static class Helper
 {
     //return player (1 or 2) that checks N out of 4 coordinates, if there is 2 players in the 4 coordinates or there is not enough coordinates checked, this function will return 0
-    private static int getPlayerThatChecksNOutOfFour2(int amountOfCheckedSlot, int a, int b, int c, int d)
-    {
-        if (a != 0 && b != 0 && c != 0 && d != 0)
-        {
-            return 0;
-        }
-
-        int[] coordinateList = { a, b, c, d };
-
-        bool isTherePlayer1 = false;
-        bool isTherePlayer2 = false;
-
-        for (int i = 0; i < coordinateList.Length; i++)
-        {
-            if (!isTherePlayer1 || !isTherePlayer2)
-            {
-                if (coordinateList[i] == 1)
-                {
-                    isTherePlayer1 = true;
-                }
-                else if (coordinateList[i] == 2)
-                {
-                    isTherePlayer2 = true;
-                }
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        if (!(isTherePlayer1 && isTherePlayer2))
-        {
-            int nonEmptyValue = isTherePlayer1 ? 1 : 2;
-            int coordinatesChecked = 0;
-            for (int i = 0; i < coordinateList.Length; i++)
-            {
-                if (coordinateList[i] != 0)
-                {
-                    coordinatesChecked += 1;
-                }
-            }
-            return coordinatesChecked == amountOfCheckedSlot ? nonEmptyValue : 0;
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
     private static int getPlayerThatChecksNOutOfFour(int amountOfCheckedSlot, int a, int b, int c, int d)
     {
         if ((a != 0 && b != 0 && c != 0 && d != 0) || (a == 0 && b == 0 && c == 0 && d == 0))

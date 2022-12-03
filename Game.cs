@@ -16,7 +16,7 @@ public class Game
         yOfBoard = _y;
         zOfBoard = _z;
         boardState = new int[xOfBoard, yOfBoard, zOfBoard];
-        ai = new AIEngine(4);
+        ai = new AIEngine(5);
     }
 
     //update board state based on slot number passed in

@@ -24,7 +24,8 @@ public class AIEngine
                     {
                         copyOfBoard[x, y, z] = 2;
                         // int score = minimax(copyOfBoard, 0, false);
-                        float score = minimax(copyOfBoard, minimaxMaxDepth, false);
+                        // float score = minimax(copyOfBoard, minimaxMaxDepth, false);
+                        float score = alphaBetaMinimax(copyOfBoard, minimaxMaxDepth, float.NegativeInfinity, float.PositiveInfinity, false);
                         Console.WriteLine($"score {score}, move {x},{y},{z}");
                         copyOfBoard[x, y, z] = 0;
                         if (score > bestScore)
@@ -111,6 +112,78 @@ public class AIEngine
 
     }
 
+    private float alphaBetaMinimax(int[,,] board, int searchDepth, float alpha, float beta, bool isMaximizer)
+    {
+        float bestScore = 0;
+        //for debugging purposes (turn off winning condition in terminal node to ease the debugging process for each method of checking e.g vertical checking or horizontal checking) 
+        int winner = getWinnerValue(board);
+
+        if (searchDepth == 0 || winner != 0)
+        {
+            if (winner != 0)
+            {
+                return winner == 1 ? -1000000000 : 1000000000;
+            }
+            else
+            {
+                bestScore = evaluateBoard(board, isMaximizer);
+                return bestScore;
+            }
+        }
+
+        if (isMaximizer)
+        {
+            bestScore = float.NegativeInfinity;
+            bool endLoop = false;
+
+            for (int x = 0; (x < board.GetLength(0)) && !endLoop; x++)
+            {
+                for (int z = 0; (z < board.GetLength(2)) && !endLoop; z++)
+                {
+                    for (int y = 0; y < board.GetLength(1); y++)
+                    {
+                        if (board[x, y, z] == 0)
+                        {
+                            board[x, y, z] = 2;
+                            float score = alphaBetaMinimax(board, searchDepth - 1, alpha, beta, false);
+                            board[x, y, z] = 0;
+                            bestScore = Math.Max(score, bestScore);
+                            alpha = Math.Max(alpha, bestScore);
+                            if (bestScore >= beta) endLoop = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            return bestScore;
+        }
+        else
+        {
+            bestScore = float.PositiveInfinity;
+            bool endLoop = false;
+
+            for (int x = 0; (x < board.GetLength(0)) && !endLoop; x++)
+            {
+                for (int z = 0; (z < board.GetLength(2)) && !endLoop; z++)
+                {
+                    for (int y = 0; y < board.GetLength(1); y++)
+                    {
+                        if (board[x, y, z] == 0)
+                        {
+                            board[x, y, z] = 1;
+                            float score = alphaBetaMinimax(board, searchDepth - 1, alpha, beta, true);
+                            board[x, y, z] = 0;
+                            bestScore = Math.Min(score, bestScore);
+                            beta = Math.Min(beta, bestScore);
+                            if (bestScore <= alpha) endLoop = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            return bestScore;
+        }
+    }
     public int getWinnerValue(int[,,] currentBoard)
     {
         //horizontal check
