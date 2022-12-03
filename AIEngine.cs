@@ -109,7 +109,6 @@ public class AIEngine
 
             return bestScore;
         }
-
     }
 
     private float alphaBetaMinimax(int[,,] board, int searchDepth, float alpha, float beta, bool isMaximizer)
